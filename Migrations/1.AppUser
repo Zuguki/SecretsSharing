@@ -1,0 +1,15 @@
+create table AppUser (
+	UserId serial primary key,
+	Email varchar(50),
+	Password varchar(100),
+	Salt varchar(50),
+	FirstName varchar(50),
+	LastName varchar(50),
+	Status int
+);
+
+create table UserSecurity (
+	UserSecurityId serial primary key,
+	UserId int,
+	VerificationCode varchar(50)
+);
