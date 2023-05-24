@@ -1,13 +1,15 @@
 using SecretsSharing.BL.Auth;
+using SecretsSharing.BL.Security;
 using SecretsSharing.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
-
 builder.Services.AddSingleton<IAuth, Auth>();
+builder.Services.AddSingleton<IEncrypt, Encrypt>();
+
+builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
     
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -1,0 +1,27 @@
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div>
+    <form action="/login" method="post">
+        @Html.AntiForgeryToken()
+        <p>
+            <label>Email</label>
+            <input name="Email" type="text" value="@Model.Email"/>
+            @* <div class="error">@Html.ValidationMessageFor(item => item.Email)</div> *@
+        </p>
+        <p>
+            <label>Password</label>
+            <input name="Password" type="password"/>
+            @* <div class="error">@Html.ValidationMessageFor(item => item.Password)</div> *@
+        </p>
+        
+        <p>
+            <input name="RememberMe" type="checkbox" value="true"/> Remember Me
+        </p>
+
+        <button>Log In</button>
+    </form>
+</div>

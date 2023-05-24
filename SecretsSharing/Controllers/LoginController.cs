@@ -1,36 +1,35 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SecretsSharing.BL.Auth;
-using SecretsSharing.DAL.Models;
 using SecretsSharing.ViewModels;
 
 namespace SecretsSharing.Controllers;
 
-public class RegisterController : Controller
+public class LoginController : Controller
 {
     private readonly IAuth auth;
     private readonly IMapper mapper;
 
-    public RegisterController(IAuth auth, IMapper mapper)
+    public LoginController(IAuth auth, IMapper mapper)
     {
         this.auth = auth;
         this.mapper = mapper;
     }
 
     [HttpGet]
-    [Route("/register")]
+    [Route("/login")]
     public async Task<IActionResult> Index()
     {
-        return View("Index", new RegisterViewModel());
+        return View("Index", new LoginViewModel());
     }
 
     [HttpPost]
-    [Route("/register")]
-    public async Task<IActionResult> IndexSave(RegisterViewModel model)
+    [Route("/login")]
+    public async Task<IActionResult> IndexSave(LoginViewModel model)
     {
         if (ModelState.IsValid)
         {
-            await auth.CreateUser(mapper.Map<RegisterViewModel, UserModel>(model));
+            await auth.Authenticate(model.Email!, model.Password!, model.RememberMe == true);
             return Redirect("/");
         }
 
