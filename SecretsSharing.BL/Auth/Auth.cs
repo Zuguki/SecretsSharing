@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using SecretsSharing.BL.Security;
 using SecretsSharing.DAL;
 using SecretsSharing.DAL.Models;
@@ -34,6 +35,15 @@ public class Auth : IAuth
             return user.UserId ?? 0;
         }
         return 0;
+    }
+
+    public async Task<ValidationResult> ValidateEmail(string email)
+    {
+        var user = await authDal.GetUser(email);
+        if (user is not null)
+            return new ValidationResult("Email already exists");
+        
+        return null;
     }
 
     public void Login(int id)

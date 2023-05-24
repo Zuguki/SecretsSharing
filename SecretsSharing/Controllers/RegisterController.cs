@@ -30,6 +30,12 @@ public class RegisterController : Controller
     {
         if (ModelState.IsValid)
         {
+            var errorMessage = await auth.ValidateEmail(model.Email ?? "");
+            ModelState.TryAddModelError("Email", errorMessage.ErrorMessage!);
+        }
+
+        if (ModelState.IsValid)
+        {
             await auth.CreateUser(mapper.Map<RegisterViewModel, UserModel>(model));
             return Redirect("/");
         }
