@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using SecretsSharing.BL.Exceptions;
+using SecretsSharing.BL.General;
 using SecretsSharing.BL.Security;
 using SecretsSharing.BL.Session;
 using SecretsSharing.DAL;
@@ -42,10 +43,22 @@ public class Auth : IAuth
         throw new AuthorizationException();
     }
 
-    public async Task<ValidationResult?> ValidateEmail(string email)
+    public async Task ValidateEmail(string email)
     {
         var user = await authDal.GetUser(email);
-        return user.UserId is not null ? new ValidationResult("Email already exists") : null;
+        if (user.UserId is not null)
+            throw new DuplicateEmailException();
+    }
+
+    public async Task Register(UserModel model)
+    {
+        using (var scope = Helpers.CreateTransactionScope())
+        {
+            await dbSession.Lock();
+            await ValidateEmail(model.Email);
+            await CreateUser(model);
+            scope.Complete();
+        }
     }
 
     public async Task Login(int id)

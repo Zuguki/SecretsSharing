@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SecretsSharing.BL.Auth;
+using SecretsSharing.BL.Exceptions;
 using SecretsSharing.DAL.Models;
 using SecretsSharing.ViewModels;
 
@@ -30,15 +31,15 @@ public class RegisterController : Controller
     {
         if (ModelState.IsValid)
         {
-            var errorMessage = await auth.ValidateEmail(model.Email ?? "");
-            if (errorMessage is not null)
-                ModelState.TryAddModelError("Email", errorMessage.ErrorMessage!);
-        }
-
-        if (ModelState.IsValid)
-        {
-            await auth.CreateUser(mapper.Map<RegisterViewModel, UserModel>(model));
-            return Redirect("/");
+            try
+            {
+                await auth.Register(mapper.Map<RegisterViewModel, UserModel>(model));
+                return Redirect("/");
+            }
+            catch (DuplicateEmailException e)
+            {
+                ModelState.TryAddModelError("Email", "Email exists");
+            }
         }
 
         return View("Index", model);
