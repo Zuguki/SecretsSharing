@@ -1,10 +1,12 @@
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using SecretsSharing.Middleware;
 using SecretsSharing.ViewModels;
 
 namespace SecretsSharing.Controllers;
 
+[SiteAuthorize]
 public class FileController : Controller
 {
     [HttpGet]

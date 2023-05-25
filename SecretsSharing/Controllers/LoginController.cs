@@ -2,10 +2,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SecretsSharing.BL.Auth;
 using SecretsSharing.BL.Exceptions;
+using SecretsSharing.Middleware;
 using SecretsSharing.ViewModels;
 
 namespace SecretsSharing.Controllers;
 
+[SiteNotAuthorize]
 public class LoginController : Controller
 {
     private readonly IAuth auth;
@@ -26,6 +28,7 @@ public class LoginController : Controller
 
     [HttpPost]
     [Route("/login")]
+    [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave(LoginViewModel model)
     {
         if (ModelState.IsValid)

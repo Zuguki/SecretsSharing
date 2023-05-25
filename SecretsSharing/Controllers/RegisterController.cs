@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using SecretsSharing.BL.Auth;
 using SecretsSharing.BL.Exceptions;
 using SecretsSharing.DAL.Models;
+using SecretsSharing.Middleware;
 using SecretsSharing.ViewModels;
 
 namespace SecretsSharing.Controllers;
 
+[SiteNotAuthorize]
 public class RegisterController : Controller
 {
     private readonly IAuth auth;
@@ -27,6 +29,7 @@ public class RegisterController : Controller
 
     [HttpPost]
     [Route("/register")]
+    [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave(RegisterViewModel model)
     {
         if (ModelState.IsValid)
