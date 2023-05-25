@@ -1,0 +1,21 @@
+@model FileViewModel
+
+@{
+    ViewData["Title"] = "File Loading";
+}
+
+<div>
+    <form action="/file" method="post", enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <p>
+            <label>File Name</label>
+            <input name="FileName" type="text" value="@Model.FileName"/>
+            <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div>
+        </p>
+        <p>
+            <input type="file" name="file">
+        </p>
+        
+        <button>Upload</button>
+    </form>
+</div>
