@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using SecretsSharing.BL.Auth;
+using SecretsSharing.BL.Session;
 using SecretsSharing.Models;
 
 namespace SecretsSharing.Controllers;
@@ -7,14 +9,17 @@ namespace SecretsSharing.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly ICurrentUser currentUser;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, ICurrentUser currentUser)
     {
         _logger = logger;
+        this.currentUser = currentUser;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        await currentUser.IsLoggedIn();
         return View();
     }
 

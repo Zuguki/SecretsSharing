@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using SecretsSharing.BL.Exceptions;
 using SecretsSharing.BL.Security;
+using SecretsSharing.BL.Session;
 using SecretsSharing.DAL;
 using SecretsSharing.DAL.Models;
 
@@ -10,11 +11,13 @@ public class Auth : IAuth
 {
     private readonly IAuthDAL authDal;
     private readonly IEncrypt encrypt;
+    private readonly IDbSession dbSession;
 
-    public Auth(IAuthDAL authDal, IEncrypt encrypt)
+    public Auth(IAuthDAL authDal, IEncrypt encrypt, IDbSession dbSession)
     {
         this.authDal = authDal;
         this.encrypt = encrypt;
+        this.dbSession = dbSession;
     }
     
     public async Task<int> CreateUser(UserModel model)
@@ -23,7 +26,7 @@ public class Auth : IAuth
         model.Password = encrypt.HashPassword(model.Password, model.Salt);
         
         var id = await authDal.CreateUser(model);
-        Login(id);
+        await Login(id);
         return id;
     }
 
@@ -32,7 +35,7 @@ public class Auth : IAuth
         var user = await authDal.GetUser(email);
         if (user.UserId is not null && user.Password == encrypt.HashPassword(password, user.Salt))
         {
-            Login(user.UserId ?? 0);
+            await Login(user.UserId ?? 0);
             return user.UserId ?? 0;
         }
 
@@ -45,8 +48,8 @@ public class Auth : IAuth
         return user.UserId is not null ? new ValidationResult("Email already exists") : null;
     }
 
-    public void Login(int id)
+    public async Task Login(int id)
     {
-        Console.WriteLine($"User with id: {id} was logged in");
+        await dbSession.SetUserId(id);
     }
 }

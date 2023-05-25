@@ -1,15 +1,22 @@
 using SecretsSharing.BL.Auth;
+using SecretsSharing.BL.General;
 using SecretsSharing.BL.Security;
+using SecretsSharing.BL.Session;
 using SecretsSharing.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton<IAuth, Auth>();
+builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddSingleton<IEncrypt, Encrypt>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddScoped<IDbSession, DbSession>();
+builder.Services.AddSingleton<IWebCookie, WebCookie>();
 
 builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
+builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
     
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
