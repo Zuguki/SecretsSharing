@@ -16,6 +16,7 @@ builder.Services.AddScoped<IDbSession, DbSession>();
 builder.Services.AddSingleton<IWebCookie, WebCookie>();
 
 builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
+builder.Services.AddSingleton<IUserTokenDAL, UserTokenDAL>();
 builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
     
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
