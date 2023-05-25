@@ -31,7 +31,8 @@ public class RegisterController : Controller
         if (ModelState.IsValid)
         {
             var errorMessage = await auth.ValidateEmail(model.Email ?? "");
-            ModelState.TryAddModelError("Email", errorMessage.ErrorMessage!);
+            if (errorMessage is not null)
+                ModelState.TryAddModelError("Email", errorMessage.ErrorMessage!);
         }
 
         if (ModelState.IsValid)

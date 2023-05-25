@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SecretsSharing.BL.Auth;
+using SecretsSharing.BL.Exceptions;
 using SecretsSharing.ViewModels;
 
 namespace SecretsSharing.Controllers;
@@ -29,8 +30,15 @@ public class LoginController : Controller
     {
         if (ModelState.IsValid)
         {
-            await auth.Authenticate(model.Email!, model.Password!, model.RememberMe == true);
-            return Redirect("/");
+            try
+            {
+                await auth.Authenticate(model.Email!, model.Password!, model.RememberMe == true);
+                return Redirect("/");
+            }
+            catch (AuthorizationException e)
+            {
+                ModelState.TryAddModelError("Email", "Name or Email is invalid");
+            }
         }
 
         return View("Index", model);

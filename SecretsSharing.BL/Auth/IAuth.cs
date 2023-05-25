@@ -7,5 +7,5 @@ public interface IAuth
 {
     Task<int> CreateUser(UserModel model);
     Task<int> Authenticate(string email, string password, bool rememberMe);
-    Task<ValidationResult> ValidateEmail(string email);
+    Task<ValidationResult?> ValidateEmail(string email);
 }

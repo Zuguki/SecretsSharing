@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using SecretsSharing.BL.Exceptions;
 using SecretsSharing.BL.Security;
 using SecretsSharing.DAL;
 using SecretsSharing.DAL.Models;
@@ -29,21 +30,19 @@ public class Auth : IAuth
     public async Task<int> Authenticate(string email, string password, bool rememberMe)
     {
         var user = await authDal.GetUser(email);
-        if (user.Password == encrypt.HashPassword(password, user.Salt))
+        if (user.UserId is not null && user.Password == encrypt.HashPassword(password, user.Salt))
         {
             Login(user.UserId ?? 0);
             return user.UserId ?? 0;
         }
-        return 0;
+
+        throw new AuthorizationException();
     }
 
-    public async Task<ValidationResult> ValidateEmail(string email)
+    public async Task<ValidationResult?> ValidateEmail(string email)
     {
         var user = await authDal.GetUser(email);
-        if (user is not null)
-            return new ValidationResult("Email already exists");
-        
-        return null;
+        return user.UserId is not null ? new ValidationResult("Email already exists") : null;
     }
 
     public void Login(int id)
