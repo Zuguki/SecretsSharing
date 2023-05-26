@@ -1,0 +1,23 @@
+@model TextViewModel
+
+@{
+    ViewData["Title"] = "Text Loading";
+}
+
+<div>
+    <form action="/text" method="post">
+        @Html.AntiForgeryToken()
+        <p>
+            <label>Title</label>
+            <input name="Title" type="text" value="@Model.Title"/>
+            <div class="error">@Html.ValidationMessageFor(item => item.Title)</div>
+        </p>
+        <p>
+            <label>Text</label>
+            <input name="Text" type="text" value="@Model.Text"/>
+            <div class="error">@Html.ValidationMessageFor(item => item.Text)</div>
+        </p>
+        
+        <button>Upload</button>
+    </form>
+</div>

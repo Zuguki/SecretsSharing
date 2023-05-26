@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using SecretsSharing.BL.Exceptions;
 using SecretsSharing.BL.General;
 using SecretsSharing.BL.Security;
