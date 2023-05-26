@@ -1,7 +1,8 @@
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using SecretsSharing.BL.Auth;
+using SecretsSharing.General;
 using SecretsSharing.Middleware;
+using SecretsSharing.Service;
 using SecretsSharing.ViewModels;
 
 namespace SecretsSharing.Controllers;
@@ -9,6 +10,13 @@ namespace SecretsSharing.Controllers;
 [SiteAuthorize]
 public class FileController : Controller
 {
+    private readonly ICurrentUser currentUser;
+
+    public FileController(ICurrentUser currentUser)
+    {
+        this.currentUser = currentUser;
+    }
+
     [HttpGet]
     [Route("/file")]
     public IActionResult Index()
@@ -22,24 +30,12 @@ public class FileController : Controller
     {
         if (Request.Form.Files.Count > 0)
         {
-            var imageData = Request.Form.Files[0];
+            var fileData = Request.Form.Files[0];
             {
-                var md5Hash = MD5.Create();
-                var inputBytes = Encoding.ASCII.GetBytes(imageData.FileName);
-                var hashBytes = md5Hash.ComputeHash(inputBytes);
-                var hash = Convert.ToHexString(hashBytes);
-
-                var dir = "./wwwroot/files/" + hash[..2] + "/" + hash[..4];
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-
-                var fileName = dir + "/" + imageData.FileName;
-
-                using (var stream = System.IO.File.Create(fileName))
-                {
-                    await imageData.CopyToAsync(stream);
-                }
-
+                var userId = await currentUser.GetUserId() ?? 0;
+                var fileName =
+                    WebFile.GetWebFileName(fileData.FileName, WebFileStartPathConstant.WebFilePath, userId);
+                await WebFile.UploadFile(fileName, fileData);
                 return Redirect("/");
             }
         }

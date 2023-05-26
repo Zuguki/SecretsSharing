@@ -1,7 +1,9 @@
-using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using SecretsSharing.BL.Auth;
+using SecretsSharing.General;
 using SecretsSharing.Middleware;
+using SecretsSharing.Service;
 using SecretsSharing.ViewModels;
 
 namespace SecretsSharing.Controllers;
@@ -9,6 +11,13 @@ namespace SecretsSharing.Controllers;
 [SiteAuthorize]
 public class TextController : Controller
 {
+    private readonly ICurrentUser currentUser;
+
+    public TextController(ICurrentUser currentUser)
+    {
+        this.currentUser = currentUser;
+    }
+
     [HttpGet]
     [Route("/text")]
     public IActionResult Index()
@@ -21,24 +30,14 @@ public class TextController : Controller
     [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> Index(TextViewModel model)
     {
-        if (model.Text is not null)
+        if (model.Text is not null && model.Title is not null)
         {
-            var md5Hash = MD5.Create();
+            var userId = await currentUser.GetUserId() ?? 0;
+            var fileName =
+                WebFile.GetWebFileName(model.Title + ".txt", WebFileStartPathConstant.WebFileTextPath, userId);
             var inputBytes = Encoding.ASCII.GetBytes(model.Text);
-            var hashBytes = md5Hash.ComputeHash(inputBytes);
-            var hash = Convert.ToHexString(hashBytes);
-
-            var dir = "./wwwroot/text/" + hash[..2] + "/" + hash[..4];
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-
-            var fileName = dir + "/" + model.Title + ".txt";
-
-            using (var stream = System.IO.File.Create(fileName))
-            {
-                await stream.WriteAsync(inputBytes);
-            }
-
+            await WebFile.UploadText(fileName, inputBytes);
+            
             return Redirect("/");
         }
         
