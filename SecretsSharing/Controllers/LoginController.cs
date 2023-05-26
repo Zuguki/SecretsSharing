@@ -11,12 +11,10 @@ namespace SecretsSharing.Controllers;
 public class LoginController : Controller
 {
     private readonly IAuth auth;
-    private readonly IMapper mapper;
 
-    public LoginController(IAuth auth, IMapper mapper)
+    public LoginController(IAuth auth)
     {
         this.auth = auth;
-        this.mapper = mapper;
     }
 
     [HttpGet]

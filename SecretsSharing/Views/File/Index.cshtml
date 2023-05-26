@@ -7,6 +7,7 @@
 <div>
     <form action="/file" method="post" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
+        <input type="hidden" name="FileId" value="@Model.FileId"/>
         <p>
             <label>File Name</label>
             <input name="FileName" type="text" value="@Model.FileName"/>
@@ -14,7 +15,6 @@
         </p>
         <p>
             <input type="file" name="file">
-            <div class="error">@Html.ValidationMessageFor(item => item.FileContent)</div>
         </p>
         
         <button>Upload</button>

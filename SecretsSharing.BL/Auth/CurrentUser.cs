@@ -1,6 +1,8 @@
 using SecretsSharing.BL.General;
 using SecretsSharing.BL.Session;
 using SecretsSharing.DAL;
+using SecretsSharing.DAL.File;
+using SecretsSharing.DAL.Models;
 
 namespace SecretsSharing.BL.Auth;
 
@@ -9,12 +11,14 @@ public class CurrentUser : ICurrentUser
     private readonly IDbSession dbSession;
     private readonly IWebCookie webCookie;
     private readonly IUserTokenDAL userTokenDal;
+    private readonly IFileDAL fileDal;
 
-    public CurrentUser(IDbSession dbSession, IWebCookie webCookie, IUserTokenDAL userTokenDal)
+    public CurrentUser(IDbSession dbSession, IWebCookie webCookie, IUserTokenDAL userTokenDal, IFileDAL fileDal)
     {
         this.dbSession = dbSession;
         this.webCookie = webCookie;
         this.userTokenDal = userTokenDal;
+        this.fileDal = fileDal;
     }
 
     public async Task<bool> IsLoggedIn()
@@ -31,6 +35,15 @@ public class CurrentUser : ICurrentUser
         }
 
         return isLoggedIn;
+    }
+
+    public async Task<IEnumerable<FileModel>> GetFiles()
+    {
+        var userId = await GetUserId();
+        if (userId is null)
+            throw new Exception("Error");
+
+        return await fileDal.Get((int) userId);
     }
 
     public async Task<int?> GetUserId() =>
