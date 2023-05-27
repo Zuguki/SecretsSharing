@@ -1,0 +1,28 @@
+@model IEnumerable<FileViewModel>
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div>
+    @if (Model.Any())
+    {
+        <div>Files: </div>
+        foreach (var item in Model)
+        {
+            <form action="/delete/@item.FilePath.Substring(1)" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="FileId" value="@item.FileId"/>
+                <p>
+                    <a href="@item.FilePath">@item.FileName</a>
+                </p>
+
+                <button>Delete</button>
+            </form>
+        }
+    }
+    else
+    {
+        <div>Profile is clear</div>
+    }
+</div>

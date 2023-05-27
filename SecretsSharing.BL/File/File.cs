@@ -1,3 +1,4 @@
+using SecretsSharing.BL.General;
 using SecretsSharing.DAL.File;
 using SecretsSharing.DAL.Models;
 
@@ -19,9 +20,18 @@ public class File : IFile
 
     public async Task AddOrUpdate(FileModel model)
     {
-        if (model.FileId == null)
-            await fileDal.Add(model);
-        else
-            await fileDal.Update(model);
+        await fileDal.Add(model);
+        // if (model.FileId == null)
+        //     await fileDal.Add(model);
+        // else
+        //     await fileDal.Update(model);
+    }
+
+    public async Task DeleteByPath(string path)
+    {
+        var webFileName = Helpers.FileNameToWebFileName(path);
+        if (System.IO.File.Exists(webFileName))
+            System.IO.File.Delete(webFileName);
+        await fileDal.DeleteByPath(path);
     }
 }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SecretsSharing.BL.Auth;
 using SecretsSharing.BL.File;
+using SecretsSharing.BL.General;
 using SecretsSharing.DAL.Models;
 using SecretsSharing.General;
 using SecretsSharing.Middleware;
@@ -26,21 +27,18 @@ public class FileController : Controller
 
     [HttpGet]
     [Route("/file")]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        var files = await currentUser.GetFiles();
-        var first = files.FirstOrDefault() ?? new FileModel();
-        
-        return View("Index", mapper.Map<FileModel, FileViewModel>(first));
+        return View("Index", new FileViewModel());
     }
 
     [HttpPost]
     [Route("/file")]
+    [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave(FileViewModel model)
     {
-        var files = await currentUser.GetFiles();
-        var userId = await currentUser.GetUserId() ?? 0;
-        if (model.FileId is not null && files.All(m => m.FileId != model.FileId))
+        var userId = await currentUser.GetUserId();
+        if (userId is null)
             throw new Exception("Error");
 
         if (ModelState.IsValid)
@@ -53,7 +51,7 @@ public class FileController : Controller
                 var fileName =
                     WebFile.GetWebFileName(fileData.FileName, WebFileStartPathConstant.WebFilePath, (int) userId);
                 await WebFile.UploadFile(fileName, fileData);
-                fileModel.FilePath = fileName;
+                fileModel.FilePath = Helpers.WebFileNameToFileName(fileName);
             }
 
             await file.AddOrUpdate(fileModel);

@@ -33,4 +33,7 @@ public static class Helpers
         var hashBytes = md5Hash.ComputeHash(Encoding.ASCII.GetBytes(str));
         return Convert.ToHexString(hashBytes);
     }
+    
+    public static string WebFileNameToFileName(string fileName) => fileName[9..];
+    public static string FileNameToWebFileName(string fileName) => "./wwwroot" + fileName;
 }

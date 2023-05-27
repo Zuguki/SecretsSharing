@@ -33,4 +33,12 @@ public class FileDAL : IFileDAL
         
         await DbHelper.QueryAsync<int>(sql, model);
     }
+
+    public async Task DeleteByPath(string path)
+    {
+        var sql = @"delete from FileQueue
+                where FilePath = @filePath";
+
+        await DbHelper.QueryAsync<int>(sql, new {filePath = path});
+    }
 }
