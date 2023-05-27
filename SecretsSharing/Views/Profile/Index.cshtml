@@ -10,11 +10,10 @@
         <div>Files: </div>
         foreach (var item in Model)
         {
-            <form action="/delete/@item.FilePath.Substring(1)" method="post">
+            <form action="/delete/@item.FilePath?.Substring(1)" method="post">
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="FileId" value="@item.FileId"/>
                 <p>
-                    <a href="@item.FilePath">@item.FileName</a>
+                    <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a>
                 </p>
 
                 <button>Delete</button>
