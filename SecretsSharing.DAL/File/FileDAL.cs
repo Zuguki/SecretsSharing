@@ -6,7 +6,7 @@ public class FileDAL : IFileDAL
 {
     public async Task<IEnumerable<FileModel>> Get(int userId)
     {
-        var sql = @"select FileId, UserId, FileName, FileContent, FilePath
+        var sql = @"select FileId, UserId, FileName, FileContent, FilePath, ShouldBeDeleted
                     from FileQueue
                     where UserId = @id";
         
@@ -15,8 +15,8 @@ public class FileDAL : IFileDAL
 
     public async Task<int> Add(FileModel model)
     {
-        var sql = @"insert into FileQueue(UserId, FileName, FileContent, FilePath)
-                    values(@UserId, @FileName, @FileContent, @FilePath)
+        var sql = @"insert into FileQueue(UserId, FileName, FileContent, FilePath, ShouldBeDeleted)
+                    values(@UserId, @FileName, @FileContent, @FilePath, @ShouldBeDeleted)
                     returning FileId";
 
         var result = await DbHelper.QueryAsync<int>(sql, model);
@@ -29,6 +29,7 @@ public class FileDAL : IFileDAL
                     set FileName = @FileName,
                         FileContent = @FileContent,
                         FilePath = @FilePath
+                        ShouldBeDeleted = @ShouldBeDeleted
                     where FileId = @FileId";
         
         await DbHelper.QueryAsync<int>(sql, model);
@@ -40,5 +41,14 @@ public class FileDAL : IFileDAL
                 where FilePath = @filePath";
 
         await DbHelper.QueryAsync<int>(sql, new {filePath = path});
+    }
+
+    public async Task<FileModel> GetFileByPath(string path)
+    {
+        var sql = @"select FileId, UserId, FileName, FileContent, FilePath, ShouldBeDeleted
+                    from FileQueue
+                    where filePath = @filePath";
+
+        return await DbHelper.QueryScalarAsync<FileModel>(sql, new {filePath = path});
     }
 }

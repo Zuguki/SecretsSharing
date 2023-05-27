@@ -34,4 +34,9 @@ public class File : IFile
             System.IO.File.Delete(webFileName);
         await fileDal.DeleteByPath(path);
     }
+
+    public async Task<FileModel?> GetFileByPath(string path)
+    {
+        return await fileDal.GetFileByPath(path);
+    }
 }

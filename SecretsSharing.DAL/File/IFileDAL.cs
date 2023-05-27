@@ -11,4 +11,5 @@ public interface IFileDAL
     Task Update(FileModel model);
     
     Task DeleteByPath(string path);
+    Task<FileModel> GetFileByPath(string path);
 }
