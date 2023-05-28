@@ -1,4 +1,4 @@
-@model TextViewModel
+@model FileViewModel
 
 @{
     ViewData["Title"] = "Text Loading";
@@ -7,17 +7,22 @@
 <div>
     <form action="/text" method="post">
         @Html.AntiForgeryToken()
+        <input type="hidden" name="FileId" value="@Model.FileId"/>
         <p>
-            <label>Title</label>
-            <input name="Title" type="text" value="@Model.Title"/>
-            <div class="error">@Html.ValidationMessageFor(item => item.Title)</div>
+            <label>File Name</label>
+            <input name="FileName" type="text" value="@Model.FileName"/>
+            <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div>
         </p>
         <p>
             <label>Text</label>
-            <input name="Text" type="text" value="@Model.Text"/>
-            <div class="error">@Html.ValidationMessageFor(item => item.Text)</div>
+            <input name="FileContent" type="text" value="@Model.FileContent"/>
+            <div class="error">@Html.ValidationMessageFor(item => item.FileContent)</div>
+        </p>
+        <p>
+            <input name="ShouldBeDeleted" type="checkbox" value="true"/> File Should Be Deleted After download
         </p>
         
         <button>Upload</button>
     </form>
 </div>
+

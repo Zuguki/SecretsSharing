@@ -41,11 +41,11 @@ public class FileActionController : Controller
             return NotFound();
         
         var downloadFileName = fileCustomName + Path.GetExtension(fileName);
+        var fileBytes = await System.IO.File.ReadAllBytesAsync(path);
         if (fileModel.ShouldBeDeleted == true)
             await Delete(methodName, dir1, dir2, fileName);
         
         
-        var fileBytes = await System.IO.File.ReadAllBytesAsync(path);
         return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, downloadFileName);
     }
 }

@@ -7,17 +7,35 @@
 <div>
     @if (Model.Any())
     {
-        <div>Files: </div>
-        foreach (var item in Model)
+        if (Model.Any(item => item.FileContent is null))
         {
-            <form action="/delete/@item.FilePath?.Substring(1)" method="post">
-                @Html.AntiForgeryToken()
-                <p>
-                    <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a>
-                </p>
+            <div>Files: </div>
+            foreach (var item in Model.Where(model => model.FileContent is null))
+            {
+                <form action="/delete/@item.FilePath?.Substring(1)" method="post">
+                    @Html.AntiForgeryToken()
+                    <p>
+                        <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a>
+                    </p>
 
-                <button>Delete</button>
-            </form>
+                    <button>Delete</button>
+                </form>
+            }
+        }
+        if (Model.Any(item => item.FileContent is not null))
+        {
+            <div>Texts: </div>
+            foreach (var item in Model.Where(model => model.FileContent is not null))
+            {
+                <form action="/delete/@item.FilePath?.Substring(1)" method="post">
+                    @Html.AntiForgeryToken()
+                    <p>
+                        <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a>
+                    </p>
+
+                    <button>Delete</button>
+                </form>
+            }
         }
     }
     else
