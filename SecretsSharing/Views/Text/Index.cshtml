@@ -4,25 +4,46 @@
     ViewData["Title"] = "Text Loading";
 }
 
-<div>
-    <form action="/text" method="post">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="FileId" value="@Model.FileId"/>
-        <p>
-            <label>File Name</label>
-            <input name="FileName" type="text" value="@Model.FileName"/>
-            <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div>
-        </p>
-        <p>
-            <label>Text</label>
-            <input name="FileContent" type="text" value="@Model.FileContent"/>
-            <div class="error">@Html.ValidationMessageFor(item => item.FileContent)</div>
-        </p>
-        <p>
-            <input name="ShouldBeDeleted" type="checkbox" value="true"/> File Should Be Deleted After download
-        </p>
-        
-        <button>Upload</button>
-    </form>
-</div>
+@* <div> *@
+@*     <form class="form" action="/text" method="post"> *@
+@*         @Html.AntiForgeryToken() *@
+@*         <input class="inp" type="hidden" name="FileId" value="@Model.FileId"/> *@
+@*         <p> *@
+@*             <label>File Name</label> *@
+@*             <input name="FileName" type="text" value="@Model.FileName"/> *@
+@*             <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div> *@
+@*         </p> *@
+@*         <p> *@
+@*             <label>Text</label> *@
+@*             <input class="inp " name="FileContent" type="text" value="@Model.FileContent"/> *@
+@*             <div class="error">@Html.ValidationMessageFor(item => item.FileContent)</div> *@
+@*         </p> *@
+@*         <p> *@
+@*             <input name="ShouldBeDeleted" type="checkbox" value="true"/> File Should Be Deleted After download *@
+@*         </p> *@
+@*          *@
+@*         <button class="button">Upload</button> *@
+@*     </form> *@
+@* </div> *@
+
+
+<form action="/text" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="FileId" value="@Model.FileId"/>
+    <div class="form-group">
+        <label>File Name</label>
+        <input name="FileName" type="text" value="@Model.FileName" class="form-control">
+        <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div>
+    </div>
+  <div class="form-group mt-3">
+    <label for="exampleFormControlTextarea1">Text</label>
+    <textarea name="FileContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+      <div class="form-group form-check mt-3">
+        <input name="ShouldBeDeleted" type="checkbox" class="form-check-input" id="exampleCheck1" value="true">
+        <label class="form-check-label" for="exampleCheck1">Should Be Deleted</label>
+      </div>
+    <button class="button mt-3">Upload</button>
+</form>
+
 

@@ -4,42 +4,83 @@
     ViewData["Title"] = "Profile";
 }
 
-<div>
-    @if (Model.Any())
-    {
-        if (Model.Any(item => item.FileContent is null))
-        {
-            <div>Files: </div>
-            foreach (var item in Model.Where(model => model.FileContent is null))
-            {
-                <form action="/delete/@item.FilePath?.Substring(1)" method="post">
-                    @Html.AntiForgeryToken()
-                    <p>
-                        <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a>
-                    </p>
+@* <div class="row"> *@
+@*     @if (Model.Any()) *@
+@*     { *@
+@*         <div class="col-sm-6"> *@
+@*             @if (Model.Any(item => item.FileContent is null)) *@
+@*             { *@
+@*                 <div>Files: </div> *@
+@*                 foreach (var item in Model.Where(model => model.FileContent is null)) *@
+@*                 { *@
+@*                     <form class="form" action="/delete/@item.FilePath?.Substring(1)" method="post"> *@
+@*                         @Html.AntiForgeryToken() *@
+@*                         <p> *@
+@*                             <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a> *@
+@*                         </p> *@
+@* *@
+@*                         <button class="button">Delete</button> *@
+@*                     </form> *@
+@*                 } *@
+@*             } *@
+@*         </div> *@
+@*         <div class="col-sm-6"> *@
+@*             @if (Model.Any(item => item.FileContent is not null)) *@
+@*             { *@
+@*                 <div>Texts: </div> *@
+@*                 foreach (var item in Model.Where(model => model.FileContent is not null)) *@
+@*                 { *@
+@*                     <form class="form" action="/delete/@item.FilePath?.Substring(1)" method="post"> *@
+@*                         @Html.AntiForgeryToken() *@
+@*                         <p> *@
+@*                             <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a> *@
+@*                         </p> *@
+@* *@
+@*                         <button class="button">Delete</button> *@
+@*                     </form> *@
+@*                 } *@
+@*             } *@
+@*         </div> *@
+@*     } *@
+@*     else *@
+@*     { *@
+@*     } *@
+@* </div> *@
 
-                    <button>Delete</button>
-                </form>
-            }
-        }
-        if (Model.Any(item => item.FileContent is not null))
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Link</th>
+            <th scope="col">Delete after load</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.OrderBy(item => item.FileContent is null))
         {
-            <div>Texts: </div>
-            foreach (var item in Model.Where(model => model.FileContent is not null))
-            {
-                <form action="/delete/@item.FilePath?.Substring(1)" method="post">
+            <tr>
+                <form class="form" action="/delete/@item.FilePath?.Substring(1)" method="post">
                     @Html.AntiForgeryToken()
-                    <p>
-                        <a href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a>
-                    </p>
-
-                    <button>Delete</button>
+                    @if (item.FileContent is null) {<th scope="row">File</th>}
+                    else {<th scope="row">Text</th>}
+                    <td>
+                        <a target="_blank" class="link-success" href="/download/@item.FilePath?.Substring(1)/@item.FileName">@item.FileName</a>
+                    </td>
+                    @if (item.ShouldBeDeleted is not null && item.ShouldBeDeleted == true){<td>true</td>}
+                    else {<td>false</td>}
+                    <td>
+                        <button class="button">Delete</button>
+                    </td>
                 </form>
-            }
+            </tr>
         }
-    }
-    else
-    {
-        <div>Profile is clear</div>
-    }
-</div>
+        </tbody>
+    </table>
+}
+else
+{
+    <div>Profile is clear</div>
+}

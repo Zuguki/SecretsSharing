@@ -45,7 +45,6 @@ public class FileActionController : Controller
         if (fileModel.ShouldBeDeleted == true)
             await Delete(methodName, dir1, dir2, fileName);
         
-        
         return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, downloadFileName);
     }
 }

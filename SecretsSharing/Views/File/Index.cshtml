@@ -4,22 +4,41 @@
     ViewData["Title"] = "File Loading";
 }
 
-<div>
-    <form action="/file" method="post" enctype="multipart/form-data">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="FileId" value="@Model.FileId"/>
-        <p>
-            <label>File Name</label>
-            <input name="FileName" type="text" value="@Model.FileName"/>
-            <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div>
-        </p>
-        <p>
-            <input type="file" name="file">
-        </p>
-        <p>
-            <input name="ShouldBeDeleted" type="checkbox" value="true"/> File Should Be Deleted
-        </p>
-        
-        <button>Upload</button>
-    </form>
-</div>
+@* <div> *@
+@*     <form class="form" action="/file" method="post" enctype="multipart/form-data"> *@
+@*         @Html.AntiForgeryToken() *@
+@*         <input type="hidden" name="FileId" value="@Model.FileId"/> *@
+@*         <p> *@
+@*             <label>File Name</label> *@
+@*             <input name="FileName" type="text" value="@Model.FileName"/> *@
+@*             <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div> *@
+@*         </p> *@
+@*         <p> *@
+@*             <input type="file" name="file"> *@
+@*         </p> *@
+@*         <p> *@
+@*             <input name="ShouldBeDeleted" type="checkbox" value="true"/> File Should Be Deleted *@
+@*         </p> *@
+@*          *@
+@*         <button class="button">Upload</button> *@
+@*     </form> *@
+@* </div> *@
+
+
+<form action="/file" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="FileId" value="@Model.FileId"/>
+    <div class="form-group">
+        <label>File Name</label>
+        <input name="FileName" type="text" value="@Model.FileName" class="form-control">
+        <div class="error">@Html.ValidationMessageFor(item => item.FileName)</div>
+    </div>
+    <div class="form-group mt-3">
+        <input type="file" name="file">
+    </div>
+      <div class="form-group form-check mt-3">
+        <input name="ShouldBeDeleted" type="checkbox" class="form-check-input" id="exampleCheck1" value="true">
+        <label class="form-check-label" for="exampleCheck1">Should Be Deleted</label>
+      </div>
+    <button class="button mt-3">Upload</button>
+</form>

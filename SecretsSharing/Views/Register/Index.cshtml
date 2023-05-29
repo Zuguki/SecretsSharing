@@ -4,21 +4,38 @@
     ViewData["Title"] = "Registration";
 }
 
-<div>
-    <form action="/register" method="post">
-        @Html.AntiForgeryToken()
-        <p>
-            <label>Email</label>
-            <input name="Email" type="text" value="@Model.Email"/>
-            <div class="error">@Html.ValidationMessageFor(item => item.Email)</div>
-        </p>
-        <p>
-            <label>Password</label>
-            <input name="Password" type="password"/>
-            <div class="error">@Html.ValidationMessageFor(item => item.Password)</div>
-        </p>
-        
+@* <div> *@
+@*     <form class="form" action="/register" method="post"> *@
+@*         @Html.AntiForgeryToken() *@
+@*         <p> *@
+@*             <label>Email</label> *@
+@*             <input name="Email" type="text" value="@Model.Email"/> *@
+@*             <div class="error">@Html.ValidationMessageFor(item => item.Email)</div> *@
+@*         </p> *@
+@*         <p> *@
+@*             <label>Password</label> *@
+@*             <input name="Password" type="password"/> *@
+@*             <div class="error">@Html.ValidationMessageFor(item => item.Password)</div> *@
+@*         </p> *@
+@*          *@
+@* *@
+@*         <button class="button">Sign In</button> *@
+@*     </form> *@
+@* </div> *@
 
-        <button>Sign In</button>
-    </form>
-</div>
+
+<form action="/register" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input name="Email" type="email" value="@Model.Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <div class="error">@Html.ValidationMessageFor(item => item.Email)</div>
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group mt-3">
+        <label for="exampleInputPassword1">Password</label>
+        <input name="Password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <div class="error">@Html.ValidationMessageFor(item => item.Password)</div>
+    </div>
+    <button class="button mt-3">Register</button>
+</form>
