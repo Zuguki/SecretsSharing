@@ -36,6 +36,4 @@ public static class WebFile
         if (!Directory.Exists(dir))
             Directory.CreateDirectory(dir);
     }
-
-
 }

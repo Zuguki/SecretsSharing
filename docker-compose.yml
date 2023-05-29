@@ -1,10 +1,10 @@
-version: "3.9"
+version: "3"
 networks:
   secret-sharing-dev:
     driver: bridge
 services:
   app:
-    container_name: secret-sharing
+    container_name: deploy-guide
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,14 +13,17 @@ services:
     networks:
       - secret-sharing-dev
     depends_on:
-      - postgres_db
-  postgres_db:
+      - postgres
+    volumes:
+      - my-wwwroot:/app/wwwroot
+  postgres:
     container_name: postgres
+    restart: always
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: secret-sharing
+      POSTGRES_DB: SecreteShar
     ports:
       - "5432:5432"
     networks:
@@ -29,3 +32,5 @@ services:
       - postgres-data:/var/lib/postgresql/data
 volumes:
   postgres-data:
+  my-wwwroot:
+    external: false
