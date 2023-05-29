@@ -5,8 +5,7 @@ namespace SecretsSharing.DAL;
 
 public static class DbHelper
 {
-    public static string ConnectionString { get; set; } =
-        "Server=postgres_db;Port=5432;User id=postgres;password=password;database=secret-sharing-db";
+    public static string ConnectionString { get; set; }
 
     public static async Task ExecuteAsync(string sql, object model)
     {

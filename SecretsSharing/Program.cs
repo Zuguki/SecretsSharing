@@ -44,6 +44,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// DbHelper.ConnectionString = app.Configuration["ConnectionStrings:Default"] ?? "";
+DbHelper.ConnectionString = app.Configuration["ConnectionStrings:Default"] ?? "";
 
 app.Run();
